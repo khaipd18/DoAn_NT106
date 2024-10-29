@@ -706,11 +706,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 77d5d2a6-4380-4516-a6ae-85ecddb2cc22
+  cloudProjectId: ba94b68f-2eb6-4455-9098-f08f5a1a951b
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: DoAn_NT106
-  organizationId: anvu5437
+  organizationId: dkmon18
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
