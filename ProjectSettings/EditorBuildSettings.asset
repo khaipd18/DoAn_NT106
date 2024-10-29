@@ -8,6 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/InGame_Scene/InGame.unity
     guid: abc07d1633d9ac240bdc8c61ac02fed8
+
   - enabled: 1
     path: Assets/InGame_Scene/Init.unity
     guid: 6de55c54d8c0d36468d5e5d65944ac96
@@ -15,6 +16,7 @@ EditorBuildSettings:
     path: Assets/InGame_Scene/Loading.unity
     guid: 8b6b4d2f45fec1941b5406326dd1b852
   - enabled: 1
+
     path: Assets/InGame_Scene/MainMenu.unity
     guid: 8069e2e6e4ec73b469ba8c28a8061a74
   - enabled: 1
