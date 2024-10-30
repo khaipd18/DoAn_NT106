@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     public Transform wallCheckCollider;
     public LayerMask wallLayer;
 
+    //Private
     [SerializeField]public float speed = 2;
     [SerializeField] public float jumpPower = 500;
     bool facingRight = true;
@@ -19,8 +20,6 @@ public class Player : MonoBehaviour
     bool isGrounded = true;
     bool jump;
     float runSpeedModifier = 2f;
-
-    //Private
     const float groundCheckRadius = 0.2f;
     const float overheadCheckRadius = 0.2f;
     const float wallCheckRadius = 0.2f;
@@ -73,13 +72,16 @@ public class Player : MonoBehaviour
 
     void Move(float dir, bool jumpFlag)
     {
+        #region jump
         if (isGrounded && jumpFlag)
         {
             isGrounded = false;
             jumpFlag = false;
 
             rb.AddForce(new Vector2(0f, jumpPower));
+            
         }
+        #endregion
         #region move and run
         //Move and speed of the movement
         float xVal = dir * speed * 100 * Time.fixedDeltaTime;
