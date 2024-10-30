@@ -1,16 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    //Public
     public float speed = 1;
-    bool facingRight = true;
-    
-    //Private
-    Rigidbody2D rb;
-    float horizontalValue;
+    private bool facingRight = true;
+
+    private Rigidbody2D rb;
+    private float horizontalValue;
 
     private void Awake()
     {
@@ -29,23 +25,31 @@ public class Player : MonoBehaviour
 
     void Move(float dir)
     {
-        //Move and speed of the movement
         float xVal = dir * speed * 100 * Time.deltaTime;
-        Vector2 targetVelocity = new Vector2(xVal,rb.velocity.y);
+        Vector2 targetVelocity = new Vector2(xVal, rb.velocity.y);
         rb.velocity = targetVelocity;
 
-        //flipping sprite with movement
-        //If looking right and clicked left (flip to the left)
+        // Thay đổi hướng dựa trên đầu vào
         if (facingRight && dir < 0)
         {
-            transform.localScale = new Vector3(-6, 6, 1);
-            facingRight = false;
+            Flip();
         }
-        //If looking left and clicked right (flip to rhe right)
         else if (!facingRight && dir > 0)
         {
-            transform.localScale = new Vector3(6, 6, 1);
-            facingRight = true;
+            Flip();
         }
+    }
+
+    void Flip()
+    {
+        facingRight = !facingRight;
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
+    }
+
+    public bool IsFacingRight()
+    {
+        return facingRight;
     }
 }
