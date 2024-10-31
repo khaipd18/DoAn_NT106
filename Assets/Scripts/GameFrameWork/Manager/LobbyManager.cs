@@ -97,5 +97,24 @@ namespace GameFramework.Core.GameFramework.Manager
                 LobbyService.Instance.DeleteLobbyAsync(_lobby.Id);
             }
         }
+
+        public async Task<bool> JoinLobby(string code, Dictionary<string, string> playerData)
+        {
+            JoinLobbyByCodeOptions options = new JoinLobbyByCodeOptions();
+            Unity.Services.Lobbies.Models.Player player = new Unity.Services.Lobbies.Models.Player(AuthenticationService.Instance.PlayerId, connectionInfo: null, SerializePlayerData(playerData));
+
+            options.Player = player;
+            try
+            {
+                _lobby = await LobbyService.Instance.JoinLobbyByCodeAsync(code, options);
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+            _refreshbeatCoroutine = StartCoroutine(RefreshLobbyCoroutine(_lobby.Id, waitTimeSeconds: 1f));
+            return true;
+        }
+
     }
 }
