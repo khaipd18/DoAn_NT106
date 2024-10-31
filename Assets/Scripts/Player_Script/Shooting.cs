@@ -5,43 +5,39 @@ public class Shooting : MonoBehaviour
     public GameObject shootingItem;      // Đối tượng bắn ra (ví dụ: đạn)
     public Transform shootingPoint;      // Vị trí xuất phát của đối tượng bắn ra
     public float bulletSpeed = 10f;      // Tốc độ của đạn
-    private Player player;
+    private Player player;               // Tham chiếu đến script Player để lấy thông tin hướng của nhân vật
 
     private void Start()
     {
-        player = GetComponent<Player>(); // Lấy script Player từ nhân vật
+        // Lấy tham chiếu đến script Player để kiểm tra hướng của nhân vật
+        player = GetComponent<Player>();
     }
 
     private void Update()
     {
-        // Kiểm tra nếu phím J được nhấn
+        // Kiểm tra nếu phím J được nhấn để thực hiện bắn
         if (Input.GetKeyDown(KeyCode.J))
         {
-            Shoot();
+            Shoot(); // Gọi hàm Shoot để bắn
         }
     }
 
     void Shoot()
     {
+        // Kiểm tra xem có tham chiếu đến Player không
         if (player == null) return;
 
         // Tạo một đối tượng bắn mới tại vị trí và hướng của shootingPoint
         GameObject si = Instantiate(shootingItem, shootingPoint.position, Quaternion.identity);
-        Rigidbody2D rb = si.GetComponent<Rigidbody2D>();
+        ShootingItem shootingItemScript = si.GetComponent<ShootingItem>(); // Lấy script ShootingItem của đối tượng đạn
 
-        if (rb != null)
+        if (shootingItemScript != null)
         {
-            // Vô hiệu hóa trọng lực để đạn bay thẳng
-            rb.gravityScale = 0;
-
-            // Kiểm tra hướng của nhân vật để bắn về đúng hướng
+            // Xác định hướng bắn dựa vào hướng mà nhân vật đang đối mặt
             float direction = player.IsFacingRight() ? 1 : -1;
 
-            // Gọi phương thức SetDirection với tốc độ đạn
-            si.GetComponent<ShootingItem>().SetDirection(direction, bulletSpeed);
-
-            // Đặt vận tốc ban đầu nếu cần (nếu bạn không dùng Rigidbody2D)
-            rb.velocity = new Vector2(bulletSpeed * direction, 0);
+            // Gọi phương thức SetDirection với tốc độ đạn và hướng
+            shootingItemScript.SetDirection(direction, bulletSpeed);
         }
     }
 }

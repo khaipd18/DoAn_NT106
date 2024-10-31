@@ -2,11 +2,27 @@
 
 public class Player : MonoBehaviour
 {
-    public float speed = 1;
-    private bool facingRight = true;
+    //Public variables
+    public Collider2D standingCollider, crouchingCollider;
+    public Transform groundCheckCollider;
+    public Transform overheadCheckCollider;
+    public Transform wallCheckCollider;
+    public LayerMask groundLayer;
+    public LayerMask wallLayer;
+    public float speed = 2;
+    public float jumpPower = 500;
 
-    private Rigidbody2D rb;
+    //Private variables
+    private bool facingRight = true;
+    private bool isRunning;
+    private bool isGrounded = true;
+    private bool jump;
     private float horizontalValue;
+    private const float groundCheckRadius = 0.2f;
+    private const float overheadCheckRadius = 0.2f;
+    private const float wallCheckRadius = 0.2f;
+    private float runSpeedModifier = 2f;
+    private Rigidbody2D rb;
 
     private void Awake()
     {
@@ -15,21 +31,58 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        // Store horizontal input
         horizontalValue = Input.GetAxisRaw("Horizontal");
+
+        // Enable/disable running mode based on Shift key
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+            isRunning = true;
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+            isRunning = false;
+
+        // Handle jump input
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump"))
+            jump = true;
+        else if (Input.GetButtonUp("Jump"))
+            jump = false;
     }
 
     private void FixedUpdate()
     {
-        Move(horizontalValue);
+        GroundCheck();
+        Move(horizontalValue, jump);
     }
 
-    void Move(float dir)
+    void GroundCheck()
     {
-        float xVal = dir * speed * 100 * Time.deltaTime;
+        bool wasGrounded = isGrounded;
+        isGrounded = false;
+
+        // Check if touching ground layer
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheckCollider.position, groundCheckRadius, groundLayer);
+        if (colliders.Length > 0)
+            isGrounded = true;
+    }
+
+    void Move(float dir, bool jumpFlag)
+    {
+        // Handle jumping
+        if (isGrounded && jumpFlag)
+        {
+            isGrounded = false;
+            jumpFlag = false;
+            rb.AddForce(new Vector2(0f, jumpPower));
+        }
+
+        // Handle movement and running speed
+        float xVal = dir * speed * 100 * Time.fixedDeltaTime;
+        if (isRunning)
+            xVal *= runSpeedModifier;
+
         Vector2 targetVelocity = new Vector2(xVal, rb.velocity.y);
         rb.velocity = targetVelocity;
 
-        // Thay đổi hướng dựa trên đầu vào
+        // Flip player based on direction
         if (facingRight && dir < 0)
         {
             Flip();
