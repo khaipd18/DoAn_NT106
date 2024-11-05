@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Game.Events;
+using GameFramework.Events;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -70,6 +72,7 @@ namespace GameFramework.Core.GameFramework.Manager
                 if (newLobby.LastUpdated > _lobby.LastUpdated)
                 {
                     _lobby = newLobby;
+                            
                 }
 
                 yield return new WaitForSecondsRealtime(waitTimeSeconds);
@@ -114,5 +117,15 @@ namespace GameFramework.Core.GameFramework.Manager
             return true;
         }
 
+        public List<Dictionary<string, PlayerDataObject>> GetPlayerData()
+        {
+            List<Dictionary<string, PlayerDataObject>> data = new List<Dictionary<string, PlayerDataObject>>();
+
+            foreach (Unity.Services.Lobbies.Models.Player player in _lobby.Players)
+            {
+                data.Add(player.Data);
+            }
+            return data;
+        }
     }
 }
