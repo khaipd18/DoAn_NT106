@@ -2,7 +2,7 @@
 
 public class Player : MonoBehaviour
 {
-    //Public variables
+    // Public variables
     public Collider2D standingCollider, crouchingCollider;
     public Transform groundCheckCollider;
     public Transform overheadCheckCollider;
@@ -11,8 +11,9 @@ public class Player : MonoBehaviour
     public LayerMask wallLayer;
     public float speed = 2;
     public float jumpPower = 500;
+    public Transform nametag; // Thêm Transform cho nametag
 
-    //Private variables
+    // Private variables
     private bool facingRight = true;
     private bool isRunning;
     private bool isGrounded = true;
@@ -99,6 +100,14 @@ public class Player : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
+
+        // Đảm bảo nametag không bị lật
+        if (nametag != null)
+        {
+            Vector3 nametagScale = nametag.localScale;
+            nametagScale.x = Mathf.Abs(nametagScale.x); // Đảm bảo x luôn dương
+            nametag.localScale = nametagScale;
+        }
     }
 
     public bool IsFacingRight()

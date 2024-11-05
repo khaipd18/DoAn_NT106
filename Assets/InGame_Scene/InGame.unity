@@ -535,6 +535,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!224 &856174908 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5078008664836955311, guid: bb5c82a6634935042abf7ff07c4efb08, type: 3}
+  m_PrefabInstance: {fileID: 5660446514262320409}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1048442675
 GameObject:
   m_ObjectHideFlags: 0
@@ -5716,6 +5721,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 327689430066262658, guid: bb5c82a6634935042abf7ff07c4efb08, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -397.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 327689430066262658, guid: bb5c82a6634935042abf7ff07c4efb08, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -191.8
+      objectReference: {fileID: 0}
     - target: {fileID: 3321887322308336755, guid: bb5c82a6634935042abf7ff07c4efb08, type: 3}
       propertyPath: m_Name
       value: Player
@@ -5723,6 +5736,14 @@ PrefabInstance:
     - target: {fileID: 3321887322308336755, guid: bb5c82a6634935042abf7ff07c4efb08, type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4057660810098512593, guid: bb5c82a6634935042abf7ff07c4efb08, type: 3}
+      propertyPath: m_CullTransparentMesh
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4748390278381599376, guid: bb5c82a6634935042abf7ff07c4efb08, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 5166710370697920183, guid: bb5c82a6634935042abf7ff07c4efb08, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5772,6 +5793,10 @@ PrefabInstance:
       propertyPath: speed
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7434499992248023791, guid: bb5c82a6634935042abf7ff07c4efb08, type: 3}
+      propertyPath: nametag
+      value: 
+      objectReference: {fileID: 856174908}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
