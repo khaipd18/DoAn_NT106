@@ -24,9 +24,5 @@ public class HealthBar : MonoBehaviour
             Debug.Log("YOU DIED");
         }
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Return))
-            LoseHealth(25);
-    }
+   
 }
