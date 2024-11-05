@@ -11,7 +11,7 @@ namespace Game
         [SerializeField] private TextMeshProUGUI _lobbyCodeText;
         [SerializeField] private Button _readyButton;
 
-        /*private void OnEnable()
+        private void OnEnable()
         {
             _readyButton.onClick.AddListener(OnReadyPressed);
         }
@@ -19,7 +19,7 @@ namespace Game
         private void OnDisable()
         {
             _readyButton.onClick.RemoveAllListeners();
-        }*/
+        }
 
         void Start()
         {
@@ -28,6 +28,7 @@ namespace Game
 
         private async void OnReadyPressed()
         {
+            Debug.Log("Ready button pressed");
             bool succeeded = await GameLobbyManager.Instance.SetPlayerReady();
             if (succeeded)
             {

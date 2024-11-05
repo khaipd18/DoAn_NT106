@@ -140,13 +140,13 @@ namespace GameFramework.Core.GameFramework.Manager
 
             try
             {
-                await LobbyService.Instance.UpdatePlayerAsync(_lobby.Id, playerId: playerId, options);
+              _lobby = await LobbyService.Instance.UpdatePlayerAsync(_lobby.Id, playerId, options);
 
-            }catch(System.Exception)
+            } catch(System.Exception)
             {
                 return false;
             }
-            LobbyEvents.OnLobbyUpdated(lobby: _lobby);
+            LobbyEvents.OnLobbyUpdated(_lobby);
 
             return true;
         }

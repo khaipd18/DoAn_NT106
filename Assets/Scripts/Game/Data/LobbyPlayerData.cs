@@ -21,10 +21,10 @@ namespace GameFramework.Core.Data
             get => _isReady; 
             set => _isReady = value;
         }
-        public void Initialize(string id, string gametag)
+        public void Initialize(string id, string gamertag)
         {
             _id = id;
-            _gamertag = gametag;
+            _gamertag = gamertag;
         }
 
 
@@ -54,7 +54,7 @@ namespace GameFramework.Core.Data
             return new Dictionary<string, string>()
             {
                 {"Id", _id},
-                {"GamerTag", _gamertag},
+                {"Gamertag", _gamertag},
                 {"IsReady", _isReady.ToString()},
             };
 

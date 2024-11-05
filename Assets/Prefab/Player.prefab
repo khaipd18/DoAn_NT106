@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -397.692, y: -191.808}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -397.5856, y: -191.80801}
+  m_SizeDelta: {x: 272.3535, y: 49.9989}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4057660810098512593
 CanvasRenderer:
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -108,7 +108,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 7071458926395760181}
   - component: {fileID: 7280626160492062119}
   - component: {fileID: 8797565759277130413}
+  - component: {fileID: 4468568880841219827}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -358,6 +359,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterTag: Player1
+  textUI_namePlayer: {fileID: 0}
+--- !u!114 &4468568880841219827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3321887322308336755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d76b78b0df699f649ad9de96142f4427, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerName: {fileID: 4748390278381599376}
+  _isReadySpriteRenderer: {fileID: 0}
 --- !u!1 &3744164275806588118
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,7 +523,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8225176294344498063
 Transform:
   m_ObjectHideFlags: 0
@@ -564,7 +580,7 @@ SpriteRenderer:
   m_SortingLayerID: -479019409
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0

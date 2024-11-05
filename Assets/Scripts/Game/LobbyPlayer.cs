@@ -7,14 +7,35 @@ namespace Game
     public class LobbyPlayer : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _playerName;
-        //[SerializeField] private 
+        [SerializeField] private SpriteRenderer _isReadySpriteRenderer; // Sử dụng SpriteRenderer cho game 2D
 
         private LobbyPlayerData _data;
+
+        private void Start()
+        {
+        }
 
         public void SetData(LobbyPlayerData data)
         {
             _data = data;
-            _playerName.text = _data.Gamertag;
+            if (_playerName != null)
+            {
+                _playerName.text = _data.Gamertag;
+                Debug.Log("Player name set to: " + _data.Gamertag); // Kiểm tra tên người chơi
+            }
+            else
+            {
+                Debug.LogError("Player name TextMeshProUGUI is not assigned.");
+            }
+            if (_data.IsReady)
+            {
+                if (_isReadySpriteRenderer != null)
+                {
+                    _isReadySpriteRenderer.color = Color.green;
+                    Debug.Log("Player is ready. Setting color to green.");
+                }
+            }
+
             gameObject.SetActive(true);
         }
     }
