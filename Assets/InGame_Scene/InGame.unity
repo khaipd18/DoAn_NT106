@@ -5975,14 +5975,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5921889008945831659, guid: bb5c82a6634935042abf7ff07c4efb08, type: 3}
-      propertyPath: lives.Array.data[0]
-      value: 
-      objectReference: {fileID: 754398632}
-    - target: {fileID: 5921889008945831659, guid: bb5c82a6634935042abf7ff07c4efb08, type: 3}
-      propertyPath: lives.Array.data[1]
-      value: 
-      objectReference: {fileID: 1202935201}
     - target: {fileID: 7280626160492062119, guid: bb5c82a6634935042abf7ff07c4efb08, type: 3}
       propertyPath: fillBar
       value: 
