@@ -11,7 +11,7 @@ namespace Game
         [SerializeField] private TextMeshProUGUI _lobbyCodeText;
         [SerializeField] private Button _readyButton;
 
-        private void OnEnable()
+        /*private void OnEnable()
         {
             _readyButton.onClick.AddListener(OnReadyPressed);
         }
@@ -19,7 +19,7 @@ namespace Game
         private void OnDisable()
         {
             _readyButton.onClick.RemoveAllListeners();
-        }
+        }*/
 
         void Start()
         {

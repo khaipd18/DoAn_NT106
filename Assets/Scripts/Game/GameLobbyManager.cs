@@ -9,6 +9,7 @@ using GameFramework.Events;
 using static GameFramework.Events.LobbyEvents;
 using Unity.Services.Lobbies.Models;
 using System.Collections.Generic;
+
 namespace Game
 {
     public class GameLobbyManager : Singleton<GameLobbyManager>
@@ -28,7 +29,7 @@ namespace Game
         public async Task<bool> CreateLobby()
         {
             LobbyPlayerData playerData = new LobbyPlayerData();
-            playerData.Initialize(AuthenticationService.Instance.PlayerId, gametag: "HostPlayer");
+            playerData.Initialize(AuthenticationService.Instance.PlayerId, "HostPlayer");
             bool succeeded = await LobbyManager.Instance.CreateLobby(maxPlayers: 2, isPrivate: true, playerData.Serialize());
             return succeeded;
         }
@@ -41,7 +42,7 @@ namespace Game
         public async Task<bool> JoinLobby(string code)
         {
             LobbyPlayerData playerData = new LobbyPlayerData();
-            playerData.Initialize(AuthenticationService.Instance.PlayerId, gametag: "JoinPlayer");
+            playerData.Initialize(AuthenticationService.Instance.PlayerId,  "JoinPlayer");
             bool succeeded = await LobbyManager.Instance.JoinLobby(code, playerData.Serialize());
             return succeeded;
         }
@@ -50,6 +51,7 @@ namespace Game
         {
             List<Dictionary<string, PlayerDataObject>> playerData = LobbyManager.Instance.GetPlayerData();
             _lobbyPlayerDatas.Clear();
+
             foreach (Dictionary<string, PlayerDataObject> data in playerData)
             {
                 LobbyPlayerData lobbyPlayerData = new LobbyPlayerData();

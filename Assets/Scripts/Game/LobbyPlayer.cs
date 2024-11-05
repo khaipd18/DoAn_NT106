@@ -6,7 +6,7 @@ namespace Game
 {
     public class LobbyPlayer : MonoBehaviour
     {
-        [SerializeField] private TextMeshPro _playerName;
+        [SerializeField] private TextMeshProUGUI _playerName;
         //[SerializeField] private 
 
         private LobbyPlayerData _data;

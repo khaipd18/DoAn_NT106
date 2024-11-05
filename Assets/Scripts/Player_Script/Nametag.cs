@@ -2,23 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using GameFramework.Core.Data;
 
 public class Nametag : MonoBehaviour
 {
     public string characterTag = "Player"; // Tag hoặc tên nhân vật
-    private TextMeshProUGUI textUI; // Sử dụng TextMeshProUGUI nếu dùng TextMeshPro
+    public  TextMeshProUGUI textUI_namePlayer; // Sử dụng TextMeshProUGUI nếu dùng TextMeshPro
     // Nếu dùng UI Text của Unity, thay đổi thành Text textUI;
 
     void Start()
     {
         // Tìm thành phần Text trên đối tượng
-        textUI = GetComponentInChildren<TextMeshProUGUI>(); // Sử dụng TextMeshProUGUI nếu dùng TextMeshPro
+        textUI_namePlayer = GetComponentInChildren<TextMeshProUGUI>(); // Sử dụng TextMeshProUGUI nếu dùng TextMeshPro
         // Nếu dùng UI Text của Unity, thay đổi thành textUI = GetComponentInChildren<Text>();
 
         // Gán nội dung cho Text
-        if (textUI != null)
+        if (textUI_namePlayer != null)
         {
-            textUI.text = characterTag;
+            textUI_namePlayer.text = characterTag;
         }
     }
 }
