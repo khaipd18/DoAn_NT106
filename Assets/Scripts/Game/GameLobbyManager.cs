@@ -62,8 +62,19 @@ namespace Game
                 _lobbyPlayerDatas.Add(lobbyPlayerData);
             }
 
-            Events.LobbyEvents.OnLobbyUpdated?.Invoke();
+            Game.Events.LobbyEvents.OnLobbyUpdated?.Invoke();
 
+        }
+
+        public List<LobbyPlayerData> GetPlayers()
+        {
+            return _lobbyPlayerDatas;
+        }
+
+        public async Task<bool> SetPlayerReady()
+        {
+            _localLobbyPlayerData.IsReady = true;
+            return await LobbyManager.Instance.UpdatePlayerData(_localLobbyPlayerData.Id, _localLobbyPlayerData.Serialize());
         }
     }
 }

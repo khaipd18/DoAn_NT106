@@ -15,6 +15,8 @@ namespace Game
         [SerializeField] private Button submitCode_bt;
         [SerializeField] private TextMeshProUGUI codeText;
         // Start is called before the first frame update
+        
+        //Lang nghe cac nut khi nhan
         void OnEnable()
         {
             Host_bt.onClick.AddListener(OnHostClicked);
@@ -22,6 +24,7 @@ namespace Game
             submitCode_bt.onClick.AddListener(OnSubmitCodeClicked);
         }
 
+        //Lang nghe cac nut khi khong nhan 
         void OnDisable()
         {
             Host_bt.onClick.RemoveListener(OnHostClicked);
@@ -29,6 +32,7 @@ namespace Game
             submitCode_bt.onClick.RemoveListener(OnSubmitCodeClicked);
         }
 
+        //Su kien nhan nut Host
         private async void OnHostClicked()
         {
             bool succeeded = await GameLobbyManager.Instance.CreateLobby();
@@ -38,13 +42,14 @@ namespace Game
             }
         }
 
+        //Su kien an nut Join
         private void ONJoinClicked()
         {
             mainScreen.SetActive(false);
             joinScreen.SetActive(true);
         }
 
-        // CLicked join button in JoinScreen
+        // SU kien nhan nut Join o Lobyy
         private async void OnSubmitCodeClicked()
         {
             string code = codeText.text;

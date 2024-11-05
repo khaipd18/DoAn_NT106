@@ -1,5 +1,4 @@
-﻿using Game.Events;
-using GameFramework.Events;
+﻿using GameFramework.Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,10 +16,13 @@ namespace GameFramework.Core.GameFramework.Manager
         private Coroutine _heartbeatCoroutine;
         private Coroutine _refreshbeatCoroutine;
 
+        //Lay ma phong
         public string GetLobbyCode()
         {
-            return _lobby?.LobbyCode;
+            return _lobby?.LobbyCode; //Neu ton tai -> ma phong
         }   
+
+
         public async Task<bool> CreateLobby(int maxPlayers, bool isPrivate, Dictionary<String, String> data)
         {
             Dictionary<string, PlayerDataObject> playerData = SerializePlayerData(data);
@@ -72,7 +74,7 @@ namespace GameFramework.Core.GameFramework.Manager
                 if (newLobby.LastUpdated > _lobby.LastUpdated)
                 {
                     _lobby = newLobby;
-                            
+                    LobbyEvents.OnLobbyUpdated?.Invoke(_lobby);
                 }
 
                 yield return new WaitForSecondsRealtime(waitTimeSeconds);
@@ -126,6 +128,27 @@ namespace GameFramework.Core.GameFramework.Manager
                 data.Add(player.Data);
             }
             return data;
+        }
+
+        public async Task<bool> UpdatePlayerData(string playerId, Dictionary<string, string> data)
+        {
+            Dictionary<string, PlayerDataObject> playerData = SerializePlayerData(data);
+            UpdatePlayerOptions options = new UpdatePlayerOptions()
+            {
+                Data = playerData
+            };
+
+            try
+            {
+                await LobbyService.Instance.UpdatePlayerAsync(_lobby.Id, playerId: playerId, options);
+
+            }catch(System.Exception)
+            {
+                return false;
+            }
+            LobbyEvents.OnLobbyUpdated(lobby: _lobby);
+
+            return true;
         }
     }
 }
