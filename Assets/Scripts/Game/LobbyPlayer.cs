@@ -7,7 +7,7 @@ namespace Game
     public class LobbyPlayer : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _playerName;
-        [SerializeField] private SpriteRenderer _isReadySpriteRenderer; // Sử dụng SpriteRenderer cho game 2D
+        [SerializeField] private SpriteRenderer _isReadySpriteRenderer;
 
         private LobbyPlayerData _data;
 

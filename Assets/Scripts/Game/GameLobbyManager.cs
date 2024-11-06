@@ -29,7 +29,7 @@ namespace Game
         public async Task<bool> CreateLobby()
         {
             LobbyPlayerData playerData = new LobbyPlayerData();
-            playerData.Initialize(AuthenticationService.Instance.PlayerId, "HostPlayer");
+            playerData.Initialize(AuthenticationService.Instance.PlayerId, gamertag: "HostPlayer");
             bool succeeded = await LobbyManager.Instance.CreateLobby(maxPlayers: 2, isPrivate: true, playerData.Serialize());
             return succeeded;
         }
@@ -42,7 +42,7 @@ namespace Game
         public async Task<bool> JoinLobby(string code)
         {
             LobbyPlayerData playerData = new LobbyPlayerData();
-            playerData.Initialize(AuthenticationService.Instance.PlayerId,  "JoinPlayer");
+            playerData.Initialize(AuthenticationService.Instance.PlayerId, gamertag: "JoinPlayer");
             bool succeeded = await LobbyManager.Instance.JoinLobby(code, playerData.Serialize());
             return succeeded;
         }
@@ -73,6 +73,7 @@ namespace Game
             return _lobbyPlayerDatas;
         }
 
+        //Khi player nhan ready buttton trong lobby
         public async Task<bool> SetPlayerReady()
         {
             _localLobbyPlayerData.IsReady = true;

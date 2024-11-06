@@ -35,7 +35,7 @@ namespace Game
         //Su kien nhan nut Host
         private async void OnHostClicked()
         {
-            bool succeeded = await GameLobbyManager.Instance.CreateLobby();
+            bool succeeded = await GameLobbyManager.Instance.CreateLobby();// Chờ thực hiện xong hàm...
             if (succeeded)
             {
                 SceneManager.LoadSceneAsync("Lobby");
