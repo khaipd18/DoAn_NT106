@@ -49,7 +49,7 @@ namespace Game
             joinScreen.SetActive(true);
         }
 
-        // SU kien nhan nut Join o Lobyy
+        // Su kien nhan nut Join o Lobyy
         private async void OnSubmitCodeClicked()
         {
             string code = codeText.text;

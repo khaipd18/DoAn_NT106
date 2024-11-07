@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Game.Events.LobbyEvents;
 
 namespace Game
 {
@@ -10,15 +11,23 @@ namespace Game
     {
         [SerializeField] private TextMeshProUGUI _lobbyCodeText;
         [SerializeField] private Button _readyButton;
+        [SerializeField] private Button _startButton;
 
         private void OnEnable()
         {
             _readyButton.onClick.AddListener(OnReadyPressed);
+            if (GameLobbyManager.Instance.IsHost)
+            {
+                Events.LobbyEvents.OnLobbyReady += OnLobbyReady;
+            }
+            Events.LobbyEvents.OnLobbyUpdated += OnLobbyUpdated;
         }
 
         private void OnDisable()
         {
             _readyButton.onClick.RemoveAllListeners();
+            Events.LobbyEvents.OnLobbyUpdated -= OnLobbyUpdated;
+            Events.LobbyEvents.OnLobbyReady -= OnLobbyReady;
         }
 
         void Start()
@@ -36,6 +45,15 @@ namespace Game
             }
         }
 
+        private void OnLobbyUpate()
+        {
+
+        }
+
+        private void OnLobbyReady()
+        {
+            _startButton.gameObject.SetActive(true);
+        }
         // Update is called once per frame
         void Update()
         {

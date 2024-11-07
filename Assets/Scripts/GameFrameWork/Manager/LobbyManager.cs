@@ -19,7 +19,7 @@ namespace GameFramework.Core.GameFramework.Manager
         //Lay ma phong
         public string GetLobbyCode()
         {
-            return _lobby?.LobbyCode; //Neu ton tai -> ma phong
+            return _lobby?.LobbyCode; //Neu ton tai -> tra ve ma phong
         }   
 
 
@@ -149,6 +149,11 @@ namespace GameFramework.Core.GameFramework.Manager
             LobbyEvents.OnLobbyUpdated(_lobby);
 
             return true;
+        }
+
+        public string GetHostID()
+        {
+            return _lobby.HostId;
         }
     }
 }
