@@ -7,19 +7,20 @@ using UnityEngine.SceneManagement;
 
 namespace Game
 {
+    // Class Init được sử dụng để khởi tạo các dịch vụ của Unity và xử lý đăng nhập người chơi.
     public class Init : MonoBehaviour
     {
         // Start is called before the first frame update
         async void Start()
         {
-            await UnityServices.InitializeAsync();
+            await UnityServices.InitializeAsync();   // Khởi tạo các dịch vụ Unity (Authentication, Relay, Lobby)
 
-            if (UnityServices.State == ServicesInitializationState.Initialized)
+            if (UnityServices.State == ServicesInitializationState.Initialized) // Kiểm tra xem các dịch vụ đã được khởi tạo thành công chưa
             {
 
                 AuthenticationService.Instance.SignedIn += OnSignIn;
 
-                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                await AuthenticationService.Instance.SignInAnonymouslyAsync(); // Đăng nhập người chơi ẩn danh (anonymous)
 
 
                 if (AuthenticationService.Instance.IsSignedIn)
@@ -31,7 +32,7 @@ namespace Game
                         PlayerPrefs.SetString("Username", username);
                     }
 
-                    SceneManager.LoadSceneAsync("MainMenu");
+                    SceneManager.LoadSceneAsync("MainMenu");  // Chuyển sang cảnh "MainMenu" sau khi đăng nhập thành công
                 }
             }
         }
@@ -42,7 +43,7 @@ namespace Game
 
         }
 
-        private void OnSignIn()
+        private void OnSignIn() // Hàm xử lý khi người chơi đăng nhập thành công
         {
             Debug.Log(message: $"Player ID: {AuthenticationService.Instance.PlayerId}");
             Debug.Log(message: $"Token: {AuthenticationService.Instance.AccessToken}");

@@ -1,3 +1,4 @@
+using System.Net.NetworkInformation;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,25 +16,23 @@ namespace Game
         [SerializeField] private Button submitCode_bt;
         [SerializeField] private TextMeshProUGUI codeText;
         // Start is called before the first frame update
-        
-        //Lang nghe cac nut khi nhan
-        void OnEnable()
+
+        void OnEnable()  // Kết nối các nút với sự kiện tương ứng khi màn hình được kích hoạt
         {
             Host_bt.onClick.AddListener(OnHostClicked);
             Join_bt.onClick.AddListener(ONJoinClicked);
             submitCode_bt.onClick.AddListener(OnSubmitCodeClicked);
         }
 
-        //Lang nghe cac nut khi khong nhan 
-        void OnDisable()
+        void OnDisable() // Hủy các listener khi đối tượng bị vô hiệu hóa
         {
             Host_bt.onClick.RemoveListener(OnHostClicked);
             Join_bt.onClick.RemoveListener(ONJoinClicked);
             submitCode_bt.onClick.RemoveListener(OnSubmitCodeClicked);
         }
 
-        //Su kien nhan nut Host
-        private async void OnHostClicked()
+        
+        private async void OnHostClicked() // Tạo phòng mới và chuyển sang lobby nếu thành công
         {
             bool succeeded = await GameLobbyManager.Instance.CreateLobby();// Chờ thực hiện xong hàm...
             if (succeeded)
@@ -41,24 +40,22 @@ namespace Game
                 SceneManager.LoadSceneAsync("Lobby");
             }
         }
-
-        //Su kien an nut Join
-        private void ONJoinClicked()
+        
+        private void ONJoinClicked() // Hiển thị màn hình nhập mã phòng khi nhấn nút Join
         {
             mainScreen.SetActive(false);
             joinScreen.SetActive(true);
         }
 
-        // Su kien nhan nut Join o Lobyy
-        private async void OnSubmitCodeClicked()
+        private async void OnSubmitCodeClicked() // Tham gia phòng với mã code đã nhập và chuyển sang lobby nếu thành công
         {
-            string code = codeText.text;
+            string code = codeText.text; // Lấy mã phòng từ TextMeshProUGUI
             code = code.Substring(0, code.Length - 1);
 
-            bool succeedeed = await GameLobbyManager.Instance.JoinLobby(code);
+            bool succeedeed = await GameLobbyManager.Instance.JoinLobby(code); // Tham gia phòng với mã code
             if (succeedeed)
             {
-                SceneManager.LoadSceneAsync("Lobby");
+                SceneManager.LoadSceneAsync("Lobby"); // Chuyển tới lobby sau khi tham gia phòng thành công
             }
         }
     }

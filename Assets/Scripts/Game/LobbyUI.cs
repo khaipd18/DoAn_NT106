@@ -18,6 +18,7 @@ namespace Game
             _readyButton.onClick.AddListener(OnReadyPressed);
             if (GameLobbyManager.Instance.IsHost)
             {
+                _startButton.onClick.AddListener(OnStartButtonClicked);
                 Events.LobbyEvents.OnLobbyReady += OnLobbyReady;
             }
             Events.LobbyEvents.OnLobbyUpdated += OnLobbyUpdated;
@@ -26,6 +27,7 @@ namespace Game
         private void OnDisable()
         {
             _readyButton.onClick.RemoveAllListeners();
+            _startButton.onClick.RemoveAllListeners();
             Events.LobbyEvents.OnLobbyUpdated -= OnLobbyUpdated;
             Events.LobbyEvents.OnLobbyReady -= OnLobbyReady;
         }
@@ -47,12 +49,17 @@ namespace Game
 
         private void OnLobbyUpate()
         {
-
+            
         }
 
         private void OnLobbyReady()
         {
             _startButton.gameObject.SetActive(true);
+        }
+
+        private async void OnStartButtonClicked()
+        {
+            await GameLobbyManager.Instance.StartGame();
         }
         // Update is called once per frame
         void Update()

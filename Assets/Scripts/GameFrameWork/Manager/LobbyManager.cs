@@ -1,7 +1,9 @@
-﻿using GameFramework.Events;
+﻿using GameFramework.Core.Data;
+using GameFramework.Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
@@ -23,7 +25,7 @@ namespace GameFramework.Core.GameFramework.Manager
         }   
 
 
-        public async Task<bool> CreateLobby(int maxPlayers, bool isPrivate, Dictionary<String, String> data)
+        public async Task<bool> CreateLobby(int maxPlayers, bool isPrivate, Dictionary<String, String> data, Dictionary<string,string> lobbyData)
         {
             Dictionary<string, PlayerDataObject> playerData = SerializePlayerData(data);
 
@@ -31,6 +33,7 @@ namespace GameFramework.Core.GameFramework.Manager
 
             CreateLobbyOptions options = new CreateLobbyOptions()
             {
+                Data = SerializeLobbyData(lobbyData),
                 IsPrivate = isPrivate,
                 Player = player
             };
@@ -93,6 +96,19 @@ namespace GameFramework.Core.GameFramework.Manager
             }
             return playerData;
         }
+
+        private Dictionary<string, DataObject> SerializeLobbyData(Dictionary<string, string> data)
+        {
+            Dictionary<string, DataObject> lobbyData = new Dictionary<string, DataObject>();
+            foreach (var kvp in data)
+            {
+                lobbyData.Add(kvp.Key, new DataObject(
+                    visibility: DataObject.VisibilityOptions.Member,
+                    value: kvp.Value
+                    ));
+            }
+            return lobbyData;
+        }
         public void OnApplicationQuit()
         {
             if (_lobby != null && _lobby.HostId == AuthenticationService.Instance.PlayerId)
@@ -130,12 +146,14 @@ namespace GameFramework.Core.GameFramework.Manager
             return data;
         }
 
-        public async Task<bool> UpdatePlayerData(string playerId, Dictionary<string, string> data)
+        public async Task<bool> UpdatePlayerData(string playerId, Dictionary<string, string> data, string allocationId = default, string connectionData = default)
         {
             Dictionary<string, PlayerDataObject> playerData = SerializePlayerData(data);
             UpdatePlayerOptions options = new UpdatePlayerOptions()
             {
-                Data = playerData
+                Data = playerData,
+                AllocationId = allocationId,
+                ConnectionInfo = connectionData
             };
 
             try
@@ -146,6 +164,28 @@ namespace GameFramework.Core.GameFramework.Manager
             {
                 return false;
             }
+            LobbyEvents.OnLobbyUpdated(_lobby);
+
+            return true;
+        }
+
+        public async Task<bool> UpdateLobbyData(Dictionary<string,string> data)
+        {
+            Dictionary<string, DataObject> lobyData = SerializeLobbyData(data);
+
+            UpdateLobbyOptions options = new UpdateLobbyOptions()
+            {
+                Data = lobyData
+            };
+
+            try
+            {
+                await LobbyService.Instance.UpdateLobbyAsync(_lobby.Id, options);
+            } catch (System.Exception)
+            {
+                return false;
+            }
+
             LobbyEvents.OnLobbyUpdated(_lobby);
 
             return true;
