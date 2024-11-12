@@ -15,11 +15,22 @@ namespace GameFramework.Core.GameFrameWork.Manager
     // Lớp Singleton quản lý kết nối Relay cho chế độ chơi nhiều người
     public class RelayManager : Singleton<RelayManager>
     {
+
+        public bool IsHost 
+        { get { 
+                return _IsHost;
+            }
+        }
+
+        private bool _IsHost = false;
         private string _joinCode;
         private string _ip;
         private int _port;
+        private byte[] _key;
+        private byte[] _hostConnectionData;
         private byte[] _connectionData;
         private System.Guid _allocationId;
+        private byte[] _allocationIdBytes;
 
         public string GetAllocationId()
         {
@@ -50,7 +61,13 @@ namespace GameFramework.Core.GameFrameWork.Manager
                 _port = dtlsEnpoint.Port;  // Lưu cổng của máy chủ Relay
 
                 _allocationId = allocation.AllocationId; // ID của phiên relay
+                _allocationIdBytes = allocation.AllocationIdBytes;
                 _connectionData = allocation.ConnectionData; // Dữ liệu kết nối của phiên relay
+                
+
+                _key = allocation.Key;
+
+                _IsHost = true;
 
                 return _joinCode;
             } catch (Exception ex)
@@ -58,7 +75,9 @@ namespace GameFramework.Core.GameFrameWork.Manager
                 Debug.LogError("Error during CreateRelay: " + ex.Message);
                 return null;
             }
+
             
+
         }
 
         // Phương thức tham gia vào một phiên relay có sẵn thông qua mã tham gia
@@ -74,6 +93,10 @@ namespace GameFramework.Core.GameFrameWork.Manager
                 _port = dtlsEnpoint.Port;
                 _allocationId = allocation.AllocationId;
                 _connectionData = allocation.ConnectionData;
+                _allocationIdBytes = allocation.AllocationIdBytes;
+                _hostConnectionData = allocation.HostConnectionData;
+
+                _key = allocation.Key;
 
                 return true;
             }
@@ -82,7 +105,18 @@ namespace GameFramework.Core.GameFrameWork.Manager
                 Debug.LogError("JoinRelay failed: " + ex.Message);
                 return false;
             }
+
+
         }
 
+        public (byte[] AllocationId, byte[] Key, byte[] ConnectionData, string _dtlsAddress, int _dtlsPort) GetHostConnectionInfo()
+        {
+            return (_allocationIdBytes, _key, _connectionData, _ip, _port);
+        }
+
+        public (byte[] AllocationId, byte[] Key, byte[] ConnectionData, byte[] HostConnectionData,string _dtlsAddress, int _dtlsPort) GetClientConnectionInfo()
+        {
+            return (_allocationIdBytes, _key, _connectionData,_hostConnectionData, _ip, _port);
+        }
     }
 }
