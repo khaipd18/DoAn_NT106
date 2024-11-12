@@ -180,7 +180,7 @@ namespace GameFramework.Core.GameFramework.Manager
 
             try
             {
-                await LobbyService.Instance.UpdateLobbyAsync(_lobby.Id, options);
+                  _lobby = await LobbyService.Instance.UpdateLobbyAsync(_lobby.Id, options);
             } catch (System.Exception)
             {
                 return false;
