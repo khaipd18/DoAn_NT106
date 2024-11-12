@@ -22,6 +22,8 @@ namespace Game
         private LobbyPlayerData _localLobbyPlayerData;
         private LobbyData _lobbyData;
         private int _maxNumberOfPlayers = 2;
+        private bool _inGame = false;
+
 
         public bool IsHost => _localLobbyPlayerData.Id == LobbyManager.Instance.GetHostID();
         
@@ -93,7 +95,7 @@ namespace Game
                 Game.Events.LobbyEvents.OnLobbyReady?.Invoke();
             }
 
-            if (_lobbyData.RelayJoinCode != default)
+            if (_lobbyData.RelayJoinCode != default && !_inGame)
             {
                 await JoinRelayServer(_lobbyData.RelayJoinCode);
                 SceneManager.LoadSceneAsync(_lobbyData.SceneName);
@@ -115,6 +117,7 @@ namespace Game
         public async Task StartGame()
         {
             string relayJoinCode = await RelayManager.Instance.CreateRelay(_maxNumberOfPlayers);
+            _inGame = true;
 
             _lobbyData.RelayJoinCode = relayJoinCode;
             await LobbyManager.Instance.UpdateLobbyData(_lobbyData.Serialize());
@@ -128,6 +131,7 @@ namespace Game
 
         private async Task<bool> JoinRelayServer(string relayJoinCode)
         {
+            _inGame = true;
             await RelayManager.Instance.JoinRelay(relayJoinCode);
             string allocationId = RelayManager.Instance.GetAllocationId();
             string connectionData = RelayManager.Instance.GetConnectionData();
