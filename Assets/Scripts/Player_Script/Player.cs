@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
+using Unity.Netcode;
 
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour // Kế thừa từ NetworkBehaviour thay vì MonoBehaviour
 {
-    // Public variables
     public Collider2D standingCollider, crouchingCollider;
     public Transform groundCheckCollider;
     public Transform overheadCheckCollider;
@@ -11,107 +11,123 @@ public class Player : MonoBehaviour
     public LayerMask wallLayer;
     public float speed = 2;
     public float jumpPower = 500;
-    public Transform nametag; // Thêm Transform cho nametag
+    public Transform nametag;
 
-    // Private variables
-    private bool facingRight = true;
     private bool isRunning;
     private bool isGrounded = true;
-    private bool jump;
     private float horizontalValue;
-    private const float groundCheckRadius = 0.2f;
-    private const float overheadCheckRadius = 0.2f;
-    private const float wallCheckRadius = 0.2f;
-    private float runSpeedModifier = 2f;
     private Rigidbody2D rb;
+
+    // Network variables for position and facing direction
+    private NetworkVariable<Vector2> networkPosition = new NetworkVariable<Vector2>(Vector2.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<bool> networkFacingRight = new NetworkVariable<bool>(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    private void Update()
     {
-        // Store horizontal input
+        if (!IsOwner) return; // Chỉ thực thi điều khiển cho chủ sở hữu của đối tượng này
+
         horizontalValue = Input.GetAxisRaw("Horizontal");
 
-        // Enable/disable running mode based on Shift key
         if (Input.GetKeyDown(KeyCode.LeftShift))
             isRunning = true;
         if (Input.GetKeyUp(KeyCode.LeftShift))
             isRunning = false;
 
-        // Handle jump input
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump"))
-            jump = true;
-        else if (Input.GetButtonUp("Jump"))
-            jump = false;
+        {
+            GroundCheck();
+            if (isGrounded)
+            {
+                RequestJumpServerRpc();
+            }
+        }
+
+        RequestMoveServerRpc(horizontalValue, isRunning); // Gửi lệnh di chuyển tới server
     }
 
     private void FixedUpdate()
     {
-        GroundCheck();
-        Move(horizontalValue, jump);
-    }
-
-    void GroundCheck()
-    {
-        bool wasGrounded = isGrounded;
-        isGrounded = false;
-
-        // Check if touching ground layer
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheckCollider.position, groundCheckRadius, groundLayer);
-        if (colliders.Length > 0)
-            isGrounded = true;
-    }
-
-    void Move(float dir, bool jumpFlag)
-    {
-        // Handle jumping
-        if (isGrounded && jumpFlag)
+        if (IsServer)
         {
-            isGrounded = false;
-            jumpFlag = false;
-            rb.AddForce(new Vector2(0f, jumpPower));
+            // Server cập nhật vị trí và hướng
+            Move(horizontalValue, isRunning);
+            networkPosition.Value = rb.position;
+            networkFacingRight.Value = networkFacingRight.Value;  // Đồng bộ hướng với tất cả client
         }
+        else
+        {
+            // Client đồng bộ hóa vị trí và hướng từ server
+            rb.position = networkPosition.Value;
+            if (networkFacingRight.Value != networkFacingRight.Value)
+            {
+                Flip();
+            }
+        }
+    }
 
-        // Handle movement and running speed
+    [ServerRpc]
+    private void RequestMoveServerRpc(float dir, bool running)
+    {
+        horizontalValue = dir;
+        isRunning = running;
+    }
+
+    [ServerRpc]
+    private void RequestJumpServerRpc()
+    {
+        if (isGrounded)
+        {
+            rb.AddForce(new Vector2(0f, jumpPower));
+            isGrounded = false;
+        }
+    }
+
+    private void Move(float dir, bool running)
+    {
         float xVal = dir * speed * 100 * Time.fixedDeltaTime;
-        if (isRunning)
-            xVal *= runSpeedModifier;
+        if (running)
+            xVal *= 2f;
 
         Vector2 targetVelocity = new Vector2(xVal, rb.velocity.y);
         rb.velocity = targetVelocity;
 
-        // Flip player based on direction
-        if (facingRight && dir < 0)
+        if (networkFacingRight.Value && dir < 0)
         {
             Flip();
         }
-        else if (!facingRight && dir > 0)
+        else if (!networkFacingRight.Value && dir > 0)
         {
             Flip();
         }
     }
 
-    void Flip()
+    private void GroundCheck()
     {
-        facingRight = !facingRight;
+        isGrounded = Physics2D.OverlapCircle(groundCheckCollider.position, 0.2f, groundLayer);
+    }
+
+    private void Flip()
+    {
+        networkFacingRight.Value = !networkFacingRight.Value; // Lật hướng trên server
         Vector3 scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
 
-        // Đảm bảo nametag không bị lật
         if (nametag != null)
         {
             Vector3 nametagScale = nametag.localScale;
-            nametagScale.x = Mathf.Abs(nametagScale.x); // Đảm bảo x luôn dương
+            nametagScale.x = Mathf.Abs(nametagScale.x);
             nametag.localScale = nametagScale;
         }
     }
 
     public bool IsFacingRight()
     {
-        return facingRight;
+        return networkFacingRight.Value; // Trả về trạng thái hướng từ NetworkVariable
     }
 }
