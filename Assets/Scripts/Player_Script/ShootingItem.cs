@@ -7,7 +7,7 @@ public class ShootingItem : MonoBehaviour
     public float maxDistance = 10f;
     private Vector3 startPosition;
 
-    public int damageAmount = 25; // Mỗi viên đạn gây ra 25 sát thương
+    public int damageAmount = 10; // Mỗi viên đạn gây ra 10 sát thương
 
     public void SetDirection(float dir, float bulletSpeed)
     {
@@ -27,17 +27,12 @@ public class ShootingItem : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        // Kiểm tra nếu đối tượng trúng có component Health
+        Health health = collision.GetComponent<Health>();
+        if (health != null)
         {
-            HealthBar healthBar = collision.GetComponentInChildren<HealthBar>();
-            if (healthBar != null)
-            {
-                healthBar.LoseHealth(damageAmount); // Mỗi lần trúng đạn sẽ trừ 25 máu
-            }
-            Destroy(gameObject);
-            return;
+            health.TakeDamage(damageAmount); // Giảm 10 máu khi trúng đạn
+            Destroy(gameObject); // Hủy viên đạn sau khi gây sát thương
         }
-
-        Destroy(gameObject);
     }
 }

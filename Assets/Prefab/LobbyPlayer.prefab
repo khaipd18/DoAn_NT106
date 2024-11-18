@@ -146,9 +146,9 @@ GameObject:
   - component: {fileID: 5587836198950226668}
   - component: {fileID: 875987002351158717}
   - component: {fileID: 415154271148175074}
+  - component: {fileID: -7280020659462748192}
   - component: {fileID: 7434499992248023791}
   - component: {fileID: 7071458926395760181}
-  - component: {fileID: 7280626160492062119}
   - component: {fileID: 8797565759277130413}
   - component: {fileID: 4468568880841219827}
   m_Layer: 0
@@ -291,6 +291,27 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: -0.039}
   m_Size: {x: 0.2, y: 0.25}
   m_Direction: 0
+--- !u!114 &-7280020659462748192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3321887322308336755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 885552913
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &7434499992248023791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,20 +353,6 @@ MonoBehaviour:
   shootingItem: {fileID: 8443912565054484337, guid: 59ad608c107455d47ab492be96c56930, type: 3}
   shootingPoint: {fileID: 4330097727122122040}
   bulletSpeed: 10
---- !u!114 &7280626160492062119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3321887322308336755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67fa7286f3daa4b43807e3b99e5ff261, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fillBar: {fileID: 0}
-  health: 100
 --- !u!114 &8797565759277130413
 MonoBehaviour:
   m_ObjectHideFlags: 0
