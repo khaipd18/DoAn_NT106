@@ -251,7 +251,6 @@ GameObject:
   - component: {fileID: 5877597786069427189}
   - component: {fileID: 7434499992248023791}
   - component: {fileID: 7071458926395760181}
-  - component: {fileID: 7280626160492062119}
   - component: {fileID: 8797565759277130413}
   - component: {fileID: 4468568880841219827}
   - component: {fileID: 8194405443800292986}
@@ -440,8 +439,8 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 0
-  speed: 10
-  jumpPower: 110
+  speed: 5
+  jumpPower: 500
   nametag: {fileID: 0}
 --- !u!114 &7071458926395760181
 MonoBehaviour:
@@ -458,20 +457,6 @@ MonoBehaviour:
   shootingItem: {fileID: 8443912565054484337, guid: 59ad608c107455d47ab492be96c56930, type: 3}
   shootingPoint: {fileID: 4330097727122122040}
   bulletSpeed: 10
---- !u!114 &7280626160492062119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3321887322308336755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67fa7286f3daa4b43807e3b99e5ff261, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fillBar: {fileID: 0}
-  health: 100
 --- !u!114 &8797565759277130413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,7 +528,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c774062ce3b1e43b29aa82410eaa0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHealth: 100
+  currentHealth: 200
   healthbar: {fileID: 1160882524580037775}
 --- !u!1 &3744164275806588118
 GameObject:
