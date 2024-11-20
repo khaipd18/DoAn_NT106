@@ -54,7 +54,7 @@ namespace Game
             // Gán thông tin chủ phòng với Id và Gamertag = "HostPlayer"
             _localLobbyPlayerData.Initialize(AuthenticationService.Instance.PlayerId, gamertag: "HostPlayer");
             _lobbyData = new LobbyData(); //Khởi tạo dữ liệu phòng chờ mới
-            //Tạo phòng chờ mới với 2 thông tin bắt buộc (MaxNumPlayers & isPrivate) + player&lobbydata
+            //Tạo phòng chờ mới với 2 thông tin bắt buộc (MaxNumPlayers & isPrivate) + options (playerdata & lobbydata)
             bool succeeded = await LobbyManager.Instance.CreateLobby(_maxNumberOfPlayers, isPrivate: true, _localLobbyPlayerData.Serialize(), _lobbyData.Serialize());
             return succeeded;
         }
@@ -72,9 +72,9 @@ namespace Game
         // Khi lobby được cập nhật (khi có thay đổi về lobby hoặc người chơi), phương thức này sẽ được gọi
         private async void OnLobbyUpdated(Lobby lobby)
         {
+            //Duyệt qua toàn bộ Data của tất cả người chơi trong phòng
             List<Dictionary<string, PlayerDataObject>> playerData = LobbyManager.Instance.GetPlayerData();
-            _lobbyPlayerDatas.Clear();
-
+            _lobbyPlayerDatas.Clear(); // Xóa Data của tất cả người chơi trong phòng (vì đã có sự thay đổi và cần cập nhật)
             int numberOfPlayerReady = 0; // Số lượng người chơi đã nhấn nút ready
 
             // Duyệt qua tất cả người chơi trong lobby và cập nhật dữ liệu người chơi
@@ -88,7 +88,7 @@ namespace Game
                     numberOfPlayerReady++;
                 }
 
-                // Nếu đây là người chơi local (người chơi hiện tại), lưu thông tin
+                // Nếu đây là người chơi local (người chơi hiện tại), lưu thông tin vào biến _localLobbyPlayerData
                 if (lobbyPlayerData.Id == AuthenticationService.Instance.PlayerId)
                 {
                     _localLobbyPlayerData = lobbyPlayerData;
