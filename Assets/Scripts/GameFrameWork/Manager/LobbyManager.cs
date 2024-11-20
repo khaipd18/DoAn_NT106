@@ -25,10 +25,10 @@ namespace GameFramework.Core.GameFramework.Manager
             return _lobby?.LobbyCode; // Nếu phòng tồn tại thì trả về mã phòng, nếu không trả về null
         }
 
-        // Tạo một lobby mới với thông số maxPlayer, privacy, và dữ liệu lobby người chơi
+        // Tạo một lobby mới với thông số maxPlayer, privacy, dữ liệu người chơi (Host) và dữ liệu lobby
         public async Task<bool> CreateLobby(int maxPlayers, bool isPrivate, Dictionary<string, string> data, Dictionary<string, string> lobbyData)
         {
-            // Chuyển đổi dữ liệu người chơi sang dạng PlayerDataObject cần thiết cho Unity Lobby
+            // Chuyển đổi dữ liệu người chơi sang dạng PlayerDataObject (
             Dictionary<string, PlayerDataObject> playerData = SerializePlayerData(data);
 
             // Tạo đối tượng player mới
@@ -103,7 +103,7 @@ namespace GameFramework.Core.GameFramework.Manager
             foreach (var kvp in data)
             {
                 playerData.Add(kvp.Key, new PlayerDataObject(
-                    visibility: PlayerDataObject.VisibilityOptions.Member,  // Đảm bảo dữ liệu có thể được người chơi khác xem
+                    visibility: PlayerDataObject.VisibilityOptions.Member,  // Đảm bảo dữ liệu có thể được người chơi khác xem(Menber)
                     value: kvp.Value  // Giá trị dữ liệu
                     ));
             }
@@ -111,7 +111,7 @@ namespace GameFramework.Core.GameFramework.Manager
         }
 
         // Chuyển dữ liệu của lobby thành dạng DataObject
-        private Dictionary<string, DataObject> SerializeLobbyData(Dictionary<string, string> data)
+        private Dictionary<string, DataObject> SerializeLobbyData(Dictionary<string, string> data) 
         {
             Dictionary<string, DataObject> lobbyData = new Dictionary<string, DataObject>();
             foreach (var kvp in data)
@@ -173,7 +173,7 @@ namespace GameFramework.Core.GameFramework.Manager
             Dictionary<string, PlayerDataObject> playerData = SerializePlayerData(data);
             UpdatePlayerOptions options = new UpdatePlayerOptions()
             {
-                Data = playerData,  // Cập nhật dữ liệu của người chơi
+                Data = playerData,  // Cập nhật dữ liệu của người chơi. VD: isReady -> true
                 AllocationId = allocationId,
                 ConnectionInfo = connectionData
             };

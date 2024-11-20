@@ -50,10 +50,11 @@ namespace Game
         // Tạo lobby mới, gọi phương thức của LobbyManager để tạo lobby
         public async Task<bool> CreateLobby()
         {
-            _localLobbyPlayerData = new LobbyPlayerData();
+            _localLobbyPlayerData = new LobbyPlayerData(); // Khởi tạo đối tượng chủ phòng (host) khi tạo phòng
+            // Gán thông tin chủ phòng với Id và Gamertag = "HostPlayer"
             _localLobbyPlayerData.Initialize(AuthenticationService.Instance.PlayerId, gamertag: "HostPlayer");
-            _lobbyData = new LobbyData();
-
+            _lobbyData = new LobbyData(); //Khởi tạo dữ liệu phòng chờ mới
+            //Tạo phòng chờ mới với 2 thông tin bắt buộc (MaxNumPlayers & isPrivate) + player&lobbydata
             bool succeeded = await LobbyManager.Instance.CreateLobby(_maxNumberOfPlayers, isPrivate: true, _localLobbyPlayerData.Serialize(), _lobbyData.Serialize());
             return succeeded;
         }
@@ -61,7 +62,8 @@ namespace Game
         // Tham gia một lobby đã có, sử dụng mã lobby để tham gia
         public async Task<bool> JoinLobby(string code)
         {
-            _localLobbyPlayerData = new LobbyPlayerData();
+            _localLobbyPlayerData = new LobbyPlayerData(); //KHởi tạo đối tượng Join khi vào phòng
+            // Gán thông tin chủ phòng với Id và Gamertag = "JoinPlayer"
             _localLobbyPlayerData.Initialize(AuthenticationService.Instance.PlayerId, gamertag: "JoinPlayer");
             bool succeeded = await LobbyManager.Instance.JoinLobby(code, _localLobbyPlayerData.Serialize());
             return succeeded;

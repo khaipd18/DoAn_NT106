@@ -10,7 +10,7 @@ namespace GameFramework.Core.Data
         // Các trường dữ liệu lưu thông tin người chơi trong lobby
         private string _id; // ID của người chơi
         private string _gamertag; // Tên hiển thị (gamertag) của người chơi
-        private bool _isReady; // Trạng thái sẵn sàng (true nếu người chơi đã sẵn sàng)
+        private bool _isReady; // Trạng thái sẵn sàng (true nếu người chơi đã nhấn nút "Ready" trong lobby)
 
         // Các thuộc tính công khai để truy xuất giá trị của các trường trên
         public string Id => _id;
@@ -24,7 +24,7 @@ namespace GameFramework.Core.Data
         }
 
         // Phương thức khởi tạo người chơi với ID và gamertag
-        public void Initialize(string id, string gamertag)
+        public void Initialize(string id, string gamertag) //Được sử dụng khởi tạo thông tin nhân vật khi Host/Join 
         {
             _id = id;
             _gamertag = gamertag;
