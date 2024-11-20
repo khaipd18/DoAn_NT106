@@ -13,14 +13,14 @@ public class Player : NetworkBehaviour
     public float jumpPower = 500f;
     public Transform nametag;
 
-    private bool isRunning;
-    private float horizontalValue;
     private Rigidbody2D rb;
+    private float horizontalValue;
+    private bool isRunning;
 
     // Network variables
     private NetworkVariable<Vector2> networkPosition = new NetworkVariable<Vector2>(Vector2.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     private NetworkVariable<bool> networkFacingRight = new NetworkVariable<bool>(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    private NetworkVariable<bool> networkIsGrounded = new NetworkVariable<bool>(true);
+    private NetworkVariable<bool> networkIsGrounded = new NetworkVariable<bool>(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private void Awake()
     {
@@ -31,20 +31,17 @@ public class Player : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        // Get input for movement
+        // Input handling
         horizontalValue = Input.GetAxisRaw("Horizontal");
-        if (Input.GetKeyDown(KeyCode.LeftShift)) isRunning = true;
-        if (Input.GetKeyUp(KeyCode.LeftShift)) isRunning = false;
+        isRunning = Input.GetKey(KeyCode.LeftShift);
 
-        // Check for jump input
-        GroundCheck();
+        // Jump input
         if (networkIsGrounded.Value && (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump")))
         {
             RequestJumpServerRpc();
         }
 
-        // Move locally and send movement request to server
-        Move(horizontalValue, isRunning);
+        // Send movement request to the server
         RequestMoveServerRpc(horizontalValue, isRunning);
     }
 
@@ -52,24 +49,24 @@ public class Player : NetworkBehaviour
     {
         if (IsServer)
         {
-            // Server handles physics and synchronization
+            // Server handles movement and synchronization
             Move(horizontalValue, isRunning);
             networkPosition.Value = rb.position;
             networkFacingRight.Value = IsFacingRight();
-            networkIsGrounded.Value = isGrounded();
+            networkIsGrounded.Value = IsGrounded();
         }
         else
         {
-            // Client predicts movement and corrects position if needed
+            // Client-side prediction and correction
             if (Vector2.Distance(rb.position, networkPosition.Value) > 0.1f)
             {
                 rb.position = Vector2.Lerp(rb.position, networkPosition.Value, 0.1f);
             }
 
-            // Flip character based on server direction
+            // Update facing direction from server
             if (networkFacingRight.Value != IsFacingRight())
             {
-                Flip();
+                FlipLocal();
             }
         }
     }
@@ -79,56 +76,51 @@ public class Player : NetworkBehaviour
     {
         horizontalValue = dir;
         isRunning = running;
+
+        // Server processes movement
+        Move(horizontalValue, isRunning);
     }
 
     [ServerRpc]
     private void RequestJumpServerRpc()
     {
-        if (isGrounded())
+        if (IsGrounded())
         {
             rb.AddForce(new Vector2(0f, jumpPower));
-            networkIsGrounded.Value = false; // Update ground state
+            networkIsGrounded.Value = false;
         }
     }
 
     private void Move(float dir, bool running)
     {
-        float xVal = dir * speed * 100 * Time.fixedDeltaTime;
-        Vector2 targetVelocity = new Vector2(xVal, rb.velocity.y);
-        rb.velocity = targetVelocity;
+        float moveSpeed = speed * (running ? 2f : 1f); // Adjust speed if running
+        float xVelocity = dir * moveSpeed;
+        rb.velocity = new Vector2(xVelocity, rb.velocity.y);
 
-        if (IsFacingRight() && dir < 0)
+        // Flip the character if needed
+        if (dir > 0 && !IsFacingRight())
         {
-            Flip();
+            FlipLocal();
         }
-        else if (!IsFacingRight() && dir > 0)
+        else if (dir < 0 && IsFacingRight())
         {
-            Flip();
-        }
-    }
-
-    private void GroundCheck()
-    {
-        if (IsServer)
-        {
-            networkIsGrounded.Value = isGrounded();
+            FlipLocal();
         }
     }
 
-    private bool isGrounded()
+    private bool IsGrounded()
     {
         return Physics2D.OverlapCircle(groundCheckCollider.position, 0.2f, groundLayer);
     }
 
-    private void Flip()
+    private void FlipLocal()
     {
-        // Flip character
-        networkFacingRight.Value = !networkFacingRight.Value;
+        // Update local direction
         Vector3 scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
 
-        // Flip nametag
+        // Flip nametag if it exists
         if (nametag != null)
         {
             Vector3 nametagScale = nametag.localScale;
@@ -139,6 +131,6 @@ public class Player : NetworkBehaviour
 
     public bool IsFacingRight()
     {
-        return networkFacingRight.Value;
+        return transform.localScale.x > 0;
     }
 }
